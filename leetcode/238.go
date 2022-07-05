@@ -9,15 +9,16 @@ func productExceptSelf(nums []int) []int {
 	}
 
 	ans := make([]int, length)
-	ans[0] = 1
-	for i := 1; i < length; i++ {
-		ans[i] = ans[i-1] * nums[i-1]
+	for i := 0; i < length; i++ {
+		ans[i] = 1
 	}
 
-	R := 1
-	for i := length - 2; i >= 0; i-- {
-		R *= nums[i+1]
-		ans[i] *= R
+	prefix, suffix := 1, 1
+	for i := 0; i < length; i++ {
+		ans[i] *= prefix
+		ans[length-1-i] *= suffix
+		prefix *= nums[i]
+		suffix *= nums[length-1-i]
 	}
 
 	return ans
