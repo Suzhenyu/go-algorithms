@@ -8,20 +8,16 @@ func productExceptSelf(nums []int) []int {
 		return nil
 	}
 
-	prefixs, postfixs, ans := make([]int, length), make([]int, length), make([]int, length)
-
-	prefixs[0] = 1
+	ans := make([]int, length)
+	ans[0] = 1
 	for i := 1; i < length; i++ {
-		prefixs[i] = prefixs[i-1] * nums[i-1]
+		ans[i] = ans[i-1] * nums[i-1]
 	}
 
-	postfixs[length-1] = 1
+	R := 1
 	for i := length - 2; i >= 0; i-- {
-		postfixs[i] = postfixs[i+1] * nums[i+1]
-	}
-
-	for i := 0; i < length; i++ {
-		ans[i] = prefixs[i] * postfixs[i]
+		R *= nums[i+1]
+		ans[i] *= R
 	}
 
 	return ans
