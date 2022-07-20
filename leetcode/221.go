@@ -1,27 +1,28 @@
 package leetcode
 
 func maximalSquare(matrix [][]byte) int {
+	dp := make([][]int, len(matrix))
 	maxSide := 0
 	for i := 0; i < len(matrix); i++ {
+		dp[i] = make([]int, len(matrix[i]))
 		for j := 0; j < len(matrix[i]); j++ {
-			for side := maxSide + 1; j+side-1 < len(matrix[i]); side++ {
-				if !isSquare(matrix, i, j, side) {
-					break
-				}
-				maxSide = max(maxSide, side)
+			dp[i][j] = int(matrix[i][j] - '0')
+			if dp[i][j] == 1 {
+				maxSide = 1
 			}
 		}
 	}
-	return maxSide * maxSide
-}
 
-func isSquare(matrix [][]byte, x, y, side int) bool {
-	for i := x; i < x+side; i++ {
-		for j := y; j < y+side; j++ {
-			if i >= len(matrix) || j >= len(matrix[i]) || matrix[i][j] != '1' {
-				return false
+	for i := 1; i < len(matrix); i++ {
+		for j := 1; j < len(matrix[i]); j++ {
+			if dp[i][j] != 1 {
+				continue
 			}
+
+			dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+			maxSide = max(maxSide, dp[i][j])
 		}
 	}
-	return true
+
+	return maxSide * maxSide
 }
